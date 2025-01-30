@@ -1,0 +1,5 @@
+{
+    "accessibility.hideAccessibleView": false,
+    "debug.hideLauncherWhileDebugging": true,
+    "liveshare.showInStatusBar": "never"
+}
