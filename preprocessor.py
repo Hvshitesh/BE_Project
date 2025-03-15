@@ -16,6 +16,8 @@ def preprocess(data):
             time_col.append(time_str)
     messages = [s.replace('\n', '') for s in messages]
     df = pd.DataFrame({'Message':messages,'Date':date_col,'Time':time_col})
+    df['Message'] = df['Message'].astype(str)  # Ensure Message column is string type
+
     df['Date']=pd.to_datetime(df['Date'], format='%d/%m/%y')
 
     #separate users and messages

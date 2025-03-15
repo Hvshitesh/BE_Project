@@ -30,8 +30,7 @@ def fetch_most_busy_users(df):
     return x,df_most_busy
 
 def create_word_cloud(selected_user,df):
- 
-    f = open("stop_hinglish.txt",'r')
+    f = open("Whatsapp_Chat_Analyzer_with_sentiment_analysis/stop_hinglish.txt",'r')  # Updated path
     stop_words = f.read()
 
     if selected_user != 'Overall':
@@ -48,13 +47,24 @@ def create_word_cloud(selected_user,df):
         return " ".join(l)
     
     wc = WordCloud(width=500,height=500,min_font_size=10,background_color='white')
-    temp['Message']=temp['Message'].apply(remove_stopwords)
-    df_wc = wc.generate(temp['Message'].str.cat(sep=" "))
+    temp['Message'] = temp['Message'].astype(str)  # Ensure Message column is string type
+    temp['Message'] = temp['Message'].apply(remove_stopwords)
+    if temp['Message'].str.cat(sep=" ").strip() == "":
+        return "No valid messages to generate a word cloud."
+    if temp['Message'].str.cat(sep=" ").strip() == "":
+        return "No valid messages to generate a word cloud."
+    if temp['Message'].str.cat(sep=" ").strip() == "":
+        return "No valid messages to generate a word cloud."
+    df_wc = wc.generate(temp['Message'].str.cat(sep=" ")) 
+
+
+
+
     return df_wc
 
 def most_common_words(selected_user,df):
 
-    f = open("stop_hinglish.txt",'r')
+    f = open("Whatsapp_Chat_Analyzer_with_sentiment_analysis/stop_hinglish.txt",'r')  # Updated path
     stop_words = f.read()
 
     if selected_user != 'Overall':
