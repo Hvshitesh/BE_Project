@@ -43,7 +43,8 @@ if uploaded_file is not None:
         st.title("Monthly TimeLine")
         timeline = helper.monthly_timeline(selected_user, df)
         fig, ax = plt.subplots()
-        ax.plot(timeline['time'], timeline['Message'], color='red')
+        ax.plot(timeline['Month'], timeline['Message'], color='red')
+
         plt.xticks(rotation="vertical")
         st.pyplot(fig)
 
@@ -89,12 +90,15 @@ if uploaded_file is not None:
 
         if selected_user == "Overall":
             st.title('Most Busy Users 🗽')
-            x, df_most_busy = helper.fetch_most_busy_users(df)
+            df_most_busy = helper.fetch_most_busy_users(df)
+            x = df_most_busy.index
+
             fig, ax = plt.subplots()
             col1, col2 = st.columns(2)
             with col1:
                 custom_colors = ['#F2C53D', '#6BBE45', '#2AABE2', '#F95D6A', '#A64AC9']
-                ax.bar(x.index, x.values, color=custom_colors)
+                ax.bar(x, x.values, color=custom_colors)
+
                 plt.xticks(rotation=45)
                 st.pyplot(fig)
 

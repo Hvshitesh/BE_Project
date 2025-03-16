@@ -1,144 +1,91 @@
-from urlextract import URLExtract
-from wordcloud import WordCloud
-from collections import Counter
 import pandas as pd
-import emoji
-def fetch_stats(selected_user,df):
+import calendar
 
-    if selected_user!='Overall':
-        df=df[df['Contact']==selected_user] #separate users dataframe
-    num_message=df.shape[0]                 #number of messages
+def preprocess_data(df):
+    # Preprocess the DataFrame as needed
+    df['Message'] = df['Message'].str.replace('\n', ' ')
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')  # Ensure Date is in datetime format
+    return df
 
-    words=[]
-    for m in df['Message']:
-        words.extend(m.split())             #number of words
+def fetch_stats(selected_user, df):
+    if selected_user != "Overall":
+        df = df[df['Contact'] == selected_user]
     
-    num_media=df[df['Message']=='<Media omitted>'].shape[0]  #number of media shared
+    num_messages = df.shape[0]
+    num_words = df['Message'].str.split().str.len().sum()
+    num_media = df[df['Message'] == '<Media omitted>'].shape[0]
+    num_urls = df['Message'].str.contains('http').sum()
     
-    extractor=URLExtract()
-    urls=[]
-    for m in df['Message']:
-        urls.extend(extractor.find_urls(m))    #number of urls
-    
-    return num_message,len(words),num_media,len(urls)
-
+    return num_messages, num_words, num_media, num_urls
 
 def fetch_most_busy_users(df):
-    x=df['Contact'].value_counts().head()
-    df_most_busy=round((df['Contact'].value_counts()/df.shape[0])*100,2).reset_index().rename(
-        columns={'Contact':'Name','count':'Percent'})
-    return x,df_most_busy
+    user_activity = df['Contact'].value_counts()  # Count messages per user
+    most_busy_users = user_activity.head()  # Get the top users
+    return most_busy_users  # Return the Series directly
 
-def create_word_cloud(selected_user,df):
-    f = open("Whatsapp_Chat_Analyzer_with_sentiment_analysis/stop_hinglish.txt",'r')  # Updated path
-    stop_words = f.read()
 
-    if selected_user != 'Overall':
-        df = df[df['Contact'] == selected_user]    #separate users dataframe
+def create_word_cloud(selected_user, df):
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
 
-    temp = df[df['Contact'] != 'group_notfication']
-    temp = temp[temp['Message'] != '<Media omitted>']
+    if selected_user != "Overall":
+        df = df[df['Contact'] == selected_user]
 
-    def remove_stopwords(text):
-        l=[]
-        for word in text.lower().split():
-            if word not in stop_words:
-                l.append(word)
-        return " ".join(l)
+    # Combine all messages into a single string
+    all_messages = ' '.join(df['Message'].tolist())
     
-    wc = WordCloud(width=500,height=500,min_font_size=10,background_color='white')
-    temp['Message'] = temp['Message'].astype(str)  # Ensure Message column is string type
-    temp['Message'] = temp['Message'].apply(remove_stopwords)
-    if temp['Message'].str.cat(sep=" ").strip() == "":
-        return "No valid messages to generate a word cloud."
-    if temp['Message'].str.cat(sep=" ").strip() == "":
-        return "No valid messages to generate a word cloud."
-    if temp['Message'].str.cat(sep=" ").strip() == "":
-        return "No valid messages to generate a word cloud."
-    df_wc = wc.generate(temp['Message'].str.cat(sep=" ")) 
+    # Generate the word cloud
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_messages)
 
+    # Display the word cloud
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')  # Hide the axes
+    plt.show()
+    return wordcloud
 
-
-
-    return df_wc
-
-def most_common_words(selected_user,df):
-
-    f = open("Whatsapp_Chat_Analyzer_with_sentiment_analysis/stop_hinglish.txt",'r')  # Updated path
-    stop_words = f.read()
-
-    if selected_user != 'Overall':
+def monthly_timeline(selected_user, df):
+    if selected_user != "Overall":
         df = df[df['Contact'] == selected_user]
-
-    temp = df[df['Contact'] != 'group_notfication']
-    temp = temp[temp['Message'] != '<Media omitted>']
-
-    words = []
-
-    for message in temp['Message']:
-        for word in message.lower().split():
-            if word not in stop_words:
-                words.append(word)
-
-    most_common_df = pd.DataFrame(Counter(words).most_common(20))
-    return most_common_df
-
-def emoji_helper(selected_user,df):
-    if selected_user != 'Overall':
-        df = df[df['Contact'] == selected_user]
-
-    emojis = []
-    for message in df['Message']:
-        emojis.extend([c for c in message if c in emoji.UNICODE_EMOJI['en']])
-
-    emoji_df = pd.DataFrame(Counter(emojis).most_common(len(Counter(emojis))),columns=['Emoji','Count'])
-
-    return emoji_df
-
-
-
-def monthly_timeline(selected_user,df):
-    if selected_user != 'Overall':
-        df = df[df['Contact'] == selected_user]
-
-    timeline = df.groupby(['Year','Month_num','Month']).count()['Message'].reset_index()
-
-    time = []
-    for i in range(timeline.shape[0]):
-        time.append(timeline['Month'][i] + "-" + str(timeline['Year'][i]))
-
-    timeline['time'] = time
-
+    
+    df['Month_num'] = df['Date'].dt.month
+    df['Year'] = df['Date'].dt.year
+    timeline = df.groupby(['Year', 'Month_num']).count()['Message'].reset_index()
+    timeline['Month'] = timeline['Month_num'].apply(lambda x: calendar.month_name[x])
     return timeline
 
-def daily_timeline(selected_user,df):
-
-    if selected_user != 'Overall':
+def daily_timeline(selected_user, df):
+    if selected_user != "Overall":
         df = df[df['Contact'] == selected_user]
-
-    daily_timeline = df.groupby('only_date').count()['Message'].reset_index()
-
+    
+    df['Date'] = df['Date'].dt.date
+    daily_timeline = df.groupby('Date').count()['Message'].reset_index()
+    daily_timeline.columns = ['only_date', 'Message']
     return daily_timeline
 
-def week_activity_map(selected_user,df):
-
-    if selected_user != 'Overall':
+def week_activity_map(selected_user, df):
+    if selected_user != "Overall":
         df = df[df['Contact'] == selected_user]
+    
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')  # Ensure Date is in datetime format
+    df['Weekday'] = df['Date'].dt.day_name()  # Get the name of the weekday
 
-    return df['day_name'].value_counts()
+    week_activity = df.groupby('Weekday').count()['Message'].reindex(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+    return week_activity
 
-def month_activity_map(selected_user,df):
-
-    if selected_user != 'Overall':
+def month_activity_map(selected_user, df):
+    if selected_user != "Overall":
         df = df[df['Contact'] == selected_user]
+    
+    df['Month'] = df['Date'].dt.month_name()  # Get the name of the month
+    month_activity = df.groupby('Month').count()['Message'].reindex(calendar.month_name[1:])  # Reindex to ensure all months are included
+    return month_activity
 
-    return df['Month'].value_counts()
-
-def activity_heatmap(selected_user,df):
-
-    if selected_user != 'Overall':
+def activity_heatmap(selected_user, df):
+    if selected_user != "Overall":
         df = df[df['Contact'] == selected_user]
-
-    user_heatmap = df.pivot_table(index='day_name', columns='period', values='Message',aggfunc='count').fillna(0)
-
-    return user_heatmap
+    
+    df['Hour'] = df['Date'].dt.hour  # Extract hour from Date
+    df['Day'] = df['Date'].dt.day_name()  # Extract day name from Date
+    heatmap_data = df.groupby(['Day', 'Hour']).count()['Message'].unstack(fill_value=0)  # Create heatmap data
+    return heatmap_data
