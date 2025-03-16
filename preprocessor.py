@@ -29,7 +29,9 @@ def preprocess(data):
             date_col.append(date_str)
             time_col.append(time_str)
     messages = [s.replace('\n', '') for s in messages if s]  # Filter out empty messages
+    print("Lengths - Messages:", len(messages), "Dates:", len(date_col), "Times:", len(time_col))  # Debugging statement
     df = pd.DataFrame({'Message': messages, 'Date': date_col, 'Time': time_col})
+
     df['Message'] = df['Message'].astype(str)  # Ensure Message column is string type
 
     if df['Message'].isnull().all() or df['Message'].empty:
