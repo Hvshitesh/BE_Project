@@ -1,0 +1,52 @@
+16/03/21, 11:00 AM - User1: Just got the chat analysis report! 📊  
+16/03/21, 11:01 AM - User2:Oh nice! What are the stats? 🤔  
+16/03/21, 11:02 AM - User1: Here are the key numbers:  
+16/03/21, 11:03 AM - User1:Top Statistics  
+Total Messages: 5,743 Total Words: 34,210 Media Shared: 879 Links Shared: 192  
+16/03/21, 11:04 AM - User2: That’s a lot! What about the timeline? 📅  
+16/03/21, 11:05 AM - User1:Monthly Timeline
+January: 1,204 messages February: 980 messages March: 1,542 messages  April: 1,030 messages  
+16/03/21, 11:06 AM - User3:What about daily stats? 🧐  
+16/03/21, 11:07 AM - User1:Daily Timeline 
+Most Active Day: March 12 (273 messages)  
+16/03/21, 11:08 AM - User2: And the activity map? 📍  
+16/03/21, 11:09 AM - User1:Activity Map
+Peak hours: 9 AM - 11 AM & 8 PM - 10 PM  
+Least active: 2 AM - 5 AM  
+
+16/03/21, 11:10 AM - User3: What was the busiest day and month? 🔥  
+16/03/21, 11:11 AM - User1:Most Busy Day
+March 12 (273 messages)  
+16/03/21, 11:12 AM - User1:Most Busy Month  
+March  
+16/03/21, 11:13 AM - User2:And weekly stats? 📊  
+16/03/21, 11:14 AM - User1:Weekly Activity Map 
+Monday: 765 messages Tuesday: 845 messages Wednesday: 920 messages Thursday: 890 messages Friday: 732 messages Saturday: 1,012 messages Sunday: 579 messages  
+16/03/21, 11:15 AM - User3: Who’s the most active user? 👀  
+16/03/21, 11:16 AM - User1:Most Busy Users  
+User1: 2,130 messages User2: 1,730 messages User3: 1,120 messages 
+16/03/21, 11:17 AM - User2: Haha, User1 talks the most! 😂  
+16/03/21, 11:18 AM - User3: What about common words? ☁️
+16/03/21, 11:19 AM - User1:Word Cloud
+Okay (540 times) Yeah (482 times) Meeting (392 times) Project (362 times)  
+16/03/21, 11:20 AM - User2: We say "Okay" way too much! 😂  
+16/03/21, 11:21 AM - User3: And emojis? Which one’s the most used? 🤔  
+
+16/03/21, 11:22 AM - User1:Emoji Analysis
+😂 (672 times)  👍 (430 times)  ❤️ (385 times)  🔥 (276 times)  
+
+16/03/21, 11:23 AM - User2:** Figures! We love laughing. 😂  
+
+16/03/21, 11:24 AM - User3:** Any insights from sentiment analysis? 🧐  
+16/03/21, 11:25 AM - User1:** **Sentiment Analysis**  
+Positive: 62% 😊  
+Neutral: 30% 😐  
+Negative: 8% 😞  
+
+16/03/21, 11:26 AM - User2:** That’s good! Most messages are positive. 😃  
+
+16/03/21, 11:27 AM - User3:** Great report! Thanks for sharing. 🙌  
+
+16/03/21, 11:28 AM - User1:** No problem! Let’s keep chatting and track the changes. 😄  
+
+-

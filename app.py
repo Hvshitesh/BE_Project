@@ -40,18 +40,26 @@ if uploaded_file is not None:
             st.header("Links Shared")
             st.title(num_urls)
 
-        st.title("Monthly TimeLine")
         timeline = helper.monthly_timeline(selected_user, df)
+        st.title("Monthly TimeLine")
         fig, ax = plt.subplots()
         ax.plot(timeline['Month'], timeline['Message'], color='red')
+        plt.title("Monthly Message Timeline")
+        ax.set_xlabel("Month")
+        ax.set_ylabel("Number of Messages")
 
         plt.xticks(rotation="vertical")
+        plt.xticks(rotation="horizontal")
         st.pyplot(fig)
 
-        st.title("Daily TimeLine")
         daily_timeline = helper.daily_timeline(selected_user, df)
+        st.title("Daily TimeLine")
         fig, ax = plt.subplots()
         ax.plot(daily_timeline['only_date'], daily_timeline['Message'], color='#795548')
+        plt.title("Daily Message Timeline")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Number of Messages")
+
         plt.xticks(rotation=45)
         st.pyplot(fig)
 
